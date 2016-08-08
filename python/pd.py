@@ -1,10 +1,21 @@
 import os 
 import time
+import serial
+
+arduino = serial.Serial("/dev/ttyACM0", 9600, timeout=5)
+time.sleep(1)
 
 top = 10
 bottom = 0
 interval = 1
 
+arduino.flush()
+
+def getValue(): 
+    value = arduino.readline()
+    time.sleep(1)
+    return value
+    
 def send2Pd(message=''):
     os.system("echo '" + message + "' | pdsend 3000")
 
@@ -24,8 +35,8 @@ def down():
         time.sleep(0.1)
 
 while True:
-   up()
-   down()
+   value = getValue()
+   setVolume(value)
 
 
 
